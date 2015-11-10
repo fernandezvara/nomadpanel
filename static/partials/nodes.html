@@ -1,0 +1,22 @@
+
+  <h1>Nodes</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name </th>
+        <th>CPU</th>
+        <th>Memory</th>
+        <th>Disk</th>
+        <th>IOPS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="(key, value) in data">
+        <th scope="row">{{ key }}</th>
+        <td>{{ value.allocated.CPU }} / {{ value.resources.CPU }}</td>
+        <td>{{ value.allocated.MemoryMB }} / {{ value.resources.MemoryMB }}</td>
+        <td>{{ value.allocated.DiskMB }} / {{ value.resources.DiskMB }}</td>
+        <td>{{ value.allocated.IOPS }} / {{ value.resources.IOPS }}</td>
+      </tr>
+    </tbody>
+  </table>
