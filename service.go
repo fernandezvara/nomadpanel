@@ -35,7 +35,7 @@ func cliStart(c *cli.Context) {
 	usage := usage.NewUsage(client, time.Duration(c.GlobalInt("wait-time"))*time.Second, log)
 	usage.Loop()
 
-	context := api.NewContext(c.GlobalString("api-addr"), serviceVersion, usage, log)
+	context := api.NewContext(c.GlobalString("api-addr"), serviceVersion, usage, log, client)
 	log.Fatal(api.ListenAndServe(context))
 
 }

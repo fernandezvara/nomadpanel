@@ -1,3 +1,16 @@
 .progress {
   margin-bottom: 0;
+  height: 20px;
+}
+
+.progress  .progress-bar {
+  line-height: 20px;
+}
+
+.navbar {
+    border-radius: 0;
+}
+
+a[ng-click]{
+    cursor: pointer;
 }

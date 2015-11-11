@@ -6,6 +6,7 @@ import (
 	"github.com/Sirupsen/logrus"
 	"github.com/fernandezvara/nomadpanel/usage"
 	"github.com/gorilla/mux"
+	nomadapi "github.com/hashicorp/nomad/api"
 )
 
 type handler func(c *Context, w http.ResponseWriter, r *http.Request)
@@ -14,9 +15,11 @@ type methods map[string]map[string]handler
 
 var m = map[string]map[string]handler{
 	"GET": {
-		"/api/version":             getVersion,
-		"/api/usage/{dc:.*}/nodes": getUsageByDCNodes,
-		"/api/usage/{dc:.*}":       getUsageByDC,
+		"/api/version":          getVersion,
+		"/api/usage/{dc}/nodes": getUsageByDCNodes,
+		"/api/usage/{dc}":       getUsageByDC,
+		"/api/datacenters":      getDCs,
+		"/api/region":           getRegion,
 	},
 	"POST":   {},
 	"PUT":    {},
@@ -28,21 +31,23 @@ var m = map[string]map[string]handler{
 
 // Context holds the required information needed by the API
 type Context struct {
-	version    string
-	listenAddr string
-	usage      *usage.Usage
-	log        *logrus.Logger
-	methods    methods
+	version     string
+	listenAddr  string
+	nomadClient *nomadapi.Client
+	usage       *usage.Usage
+	log         *logrus.Logger
+	methods     methods
 }
 
 // NewContext returns the structure needed to manage the API
-func NewContext(listenAddr, version string, usage *usage.Usage, log *logrus.Logger) *Context {
+func NewContext(listenAddr, version string, usage *usage.Usage, log *logrus.Logger, client *nomadapi.Client) *Context {
 	return &Context{
-		version:    version,
-		listenAddr: listenAddr,
-		usage:      usage,
-		log:        log,
-		methods:    m,
+		version:     version,
+		listenAddr:  listenAddr,
+		nomadClient: client,
+		usage:       usage,
+		log:         log,
+		methods:     m,
 	}
 }
 
