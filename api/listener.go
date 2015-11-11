@@ -20,6 +20,8 @@ var m = map[string]map[string]handler{
 		"/api/usage/{dc}":       getUsageByDC,
 		"/api/datacenters":      getDCs,
 		"/api/region":           getRegion,
+		"/api/jobs":             getJobs,
+		"/api/job/{id}":         getJob,
 	},
 	"POST":   {},
 	"PUT":    {},

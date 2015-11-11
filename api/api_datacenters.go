@@ -26,10 +26,11 @@ type regionStruct struct {
 
 func getRegion(c *Context, w http.ResponseWriter, r *http.Request) {
 	region, err := c.nomadClient.Agent().Region()
+	w.Header().Set("Content-Type", "application/json")
 	if err != nil {
+		json.NewEncoder(w).Encode(er{err.Error()})
 		w.WriteHeader(500)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(regionStruct{region})
 }

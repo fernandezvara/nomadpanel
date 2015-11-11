@@ -49,6 +49,34 @@ nomadApp.controller('nodesController', function($scope, $log, $interval,
   $log.log("nodesController loaded");
 });
 
+nomadApp.controller('jobsController', function($scope, $log, $interval,
+  Jobs, Job, client) {
+
+  getJobs = function() {
+    Jobs.query(function(data) {
+      $scope.data = data;
+    });
+  };
+
+  getJobs();
+  $interval(function() {
+    getJobs();
+  }, 10000);
+
+  $scope.showJobDetails = function(jobID) {
+    Job.get({
+      id: jobID
+    }, function(data) {
+      $scope.selectedJob = data;
+    });
+
+    $log.log($scope.selectedJob);
+  };
+
+
+  $log.log("nodesController loaded");
+});
+
 nomadApp.controller('menuController', function($scope, $location, $log, client,
   Region) {
   $scope.isActive = function(viewLocation) {
@@ -81,6 +109,14 @@ nomadApp.factory("NodesPerDC", function($resource) {
   return $resource("/api/usage/:id/nodes");
 });
 
+nomadApp.factory("Jobs", function($resource) {
+  return $resource("/api/jobs");
+});
+
+nomadApp.factory("Job", function($resource) {
+  return $resource("/api/job/:id");
+});
+
 nomadApp.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -91,6 +127,10 @@ nomadApp.config(['$routeProvider',
     when('/nodes', {
       templateUrl: 'partials/nodes.html',
       controller: 'nodesController'
+    }).
+    when('/jobs', {
+      templateUrl: 'partials/jobs.html',
+      controller: 'jobsController'
     }).
     otherwise({
       redirectTo: '/resources'
